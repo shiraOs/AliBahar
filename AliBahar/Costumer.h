@@ -11,7 +11,7 @@ class product;
 class vendor;
 class Order;
 
-class Costumer
+class Costumer //dfw
 {
 private:
 	char* userName;
