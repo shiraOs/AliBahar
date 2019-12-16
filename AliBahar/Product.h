@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNING
 #ifndef _PRODUCT_H
 #define _PRODUCT_H
-//hay
+
 #include <iostream>
 using namespace std;
 
