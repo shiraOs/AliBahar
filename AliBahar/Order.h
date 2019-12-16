@@ -21,10 +21,10 @@ public:
 	Order(const Order& other);
 	~Order();
 
-	void setTotalPrice(int newTotalPrice);
+	//void setTotalPrice(int newTotalPrice);
 	int getTotalPrice() const;
 
-	void setProductAmount(int newProductAmount);
+	//void setProductAmount(int newProductAmount);
 	int getProductAmount() const;
 
 	void setCostumer(const Costumer& newCostumer);
@@ -38,5 +38,4 @@ public:
 
 #endif // !_ORDER_H
 
-//void addProductToOrder(const Order* CurrOrder, const product* newProduct);
 

@@ -29,11 +29,10 @@ public:
 	const Costumer* getCostumer() const;
 	//void setVendor(vendor* newVen);
 	const vendor* getVendor() const;
-	void setDate(const char* newDate);
-	const char* getDate() const;
+	//void setDate(const char* newDate);
+	char* getDate() const;
 	void setDescription(const char* newDcp);
-	const char* getDescription() const;
-
+	char* getDescription() const;
 };
 
 #endif //_FEEDBACK_H

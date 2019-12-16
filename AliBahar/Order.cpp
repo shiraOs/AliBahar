@@ -6,8 +6,11 @@ Order::Order(const Costumer& costumerP, int totalPrice, int productAmount) : cos
 {
 	cout << "In Order's c'tor for " << costumerP.getUserName() << endl;
 
-	setTotalPrice(totalPrice);
-	setProductAmount(productAmount);
+	this->totalPrice = totalPrice;
+	this->productAmount = productAmount;
+
+	/*setTotalPrice(totalPrice);
+	setProductAmount(productAmount);*/
 
 	//purchases = new product*[productAmount];
 }
@@ -16,9 +19,13 @@ Order::Order(const Order& other)
 {
 	cout << "In Order's cpy c'tor for " << other.costumerP->getUserName() << endl;
 
-	setTotalPrice(other.totalPrice);
+	this->totalPrice = other.totalPrice;
+	this->productAmount = other.productAmount;
+	this->costumerP = other.costumerP;
+
+	/*setTotalPrice(other.totalPrice);
 	setProductAmount(other.productAmount);
-	setCostumer(*other.costumerP);
+	setCostumer(*other.costumerP);*/
 
 	purchases = new const product*[productAmount];
 
@@ -30,26 +37,26 @@ Order::~Order()
 {
 	cout << "In Order's d'tor for " << this->costumerP->getUserName() << endl;
 
-	for (int i = 0; i < productAmount; i++)
-		delete purchases[i];
+	for (int i = 0; i < productAmount; i++)		//init the pointers to products
+		purchases[i] = nullptr;
 
-	delete[] purchases;
+	delete[] purchases;							//remove the allocation of main arr
 }
 
-void Order::setTotalPrice(int newTotalPrice)
-{
-	totalPrice = newTotalPrice;
-}
+//void Order::setTotalPrice(int newTotalPrice)
+//{
+//	totalPrice = newTotalPrice;
+//}
 
 int Order::getTotalPrice() const
 {
 	return totalPrice;
 }
 
-void Order::setProductAmount(int newProductAmount)
-{
-	productAmount = newProductAmount;
-}
+//void Order::setProductAmount(int newProductAmount)
+//{
+//	productAmount = newProductAmount;
+//}
 
 int Order::getProductAmount() const
 {
@@ -71,7 +78,10 @@ void Order::addProduct(const product& newProduct)
 	productAmount++;
 	const product** temp = new const product*[productAmount];
 	for (int i = 0; i < productAmount - 1; i++)
+	{
 		temp[i] = purchases[i];
+		purchases[i] = nullptr;
+	}
 	temp[productAmount - 1] = &newProduct;
 
 	delete[] purchases;
@@ -95,17 +105,3 @@ void Order::showProducts() const
 
 /**************************************************************/
 
-//void addProductToOrder(Order* CurrOrder, const product* newProduct)		//get point to order and a new product to add to order
-//{
-//	int pAmount = CurrOrder->getProductAmount();	//old amount
-//	CurrOrder->setProductAmount(pAmount + 1);		//add one
-//	
-//	const product** purchases = CurrOrder->getPurchases();		//all products
-//	const product** temp = new const product*[pAmount+1];		//temp cpy to resize 
-//	for (int i = 0; i < pAmount; i++)
-//		temp[i] = purchases[i];
-//	temp[pAmount] = newProduct;
-//
-//	delete[] purchases;
-//	purchases = temp;
-//}

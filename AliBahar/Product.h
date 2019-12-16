@@ -30,13 +30,15 @@ public:
 	//void setCategory(eCategory newCategory);
 	const eCategory getCategory() const;
 	void setName(char* newName);
-	const char* getName() const;
+	char* getName() const;
 	void setPrice(int newPrice);
-	const int getPrice() const;
+	int getPrice() const;
 	//void setSerialNum(int newSerialNum);
-	const int getSerialNum() const;
+	int getSerialNum() const;
 	void setVendor(const vendor& newV);
 	const vendor* getVendor() const;
+
+	void showDetails() const;
 };
 
 #endif	//_PRODUCT_H

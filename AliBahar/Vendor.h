@@ -31,7 +31,7 @@ public:
 	~vendor();
 
 	void setUserName(const char* name);
-	const char* getUserName() const;
+	char* getUserName() const;
 
 	void setPassword(const char* newPassword);
 	char* getPassword() const;
@@ -46,15 +46,10 @@ public:
 	const feedback** getfeedback() const;
 
 	int getProductAmount() const;
-	int getFeedbackAmount() const;
+	//int getFeedbackAmount() const;
 
 	void showProducts() const;
+	void showDetails() const;
 };
 
 #endif // !_VENDOR_H
-
-//*********************************************************************//
-
-void addVendor(vendor** allVendors, int* vendorsSize);			//option 2 from main
-void addPdtToVdr(vendor** allVendors, int vendorSize);			//option 3 from main
-void addFeedback(Costumer** allCostumers, int costumerSize, vendor** allVendors, int vendorsSize);	//option 4 from main

@@ -11,7 +11,7 @@ class product;
 class vendor;
 class Order;
 
-class Costumer //dfw
+class Costumer
 {
 private:
 	char* userName;
@@ -32,7 +32,7 @@ public:
 	~Costumer();
 
 	void setUserName(const char* name);
-	const char* getUserName() const;
+	char* getUserName() const;
 
 	void setPassword(const char* newPassword);
 	char* getPassword() const;
@@ -55,17 +55,9 @@ public:
 
 	void removeProductsFromShoppingCart(int orderNum);
 	void removeOrderFromPenOrders(int orderNum);
+	void showDetails() const;
 
 //	void setpenOrdersAmount(int newPenAmount);
 };
 
 #endif // !_COSTUMER_H
-
-//*********************************************************************//
-
-void addCostumer(Costumer** allCostumers, int* costumerSize);				//option 1 from main
-void addProductToShoppingCart(Costumer** allCostumers, int costumerSize, vendor** allVendors, int vendorSize); //option 5 from main
-void addOrderToPendingOrders(Costumer** allCostumers, int costumerSize);		//option 6 from main
-void payOrder(Costumer** allCostumers, int costumerSize);
-
-//void addOrderToPenOrders(const Order& newOrder, Costumer* currCostumer);

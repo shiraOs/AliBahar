@@ -4,6 +4,19 @@ address::address(char* newState, char* newCity, char* newStreet, int newHomeNum,
 {
 	cout << "In Address's c'tor for " << newState << endl;
 
+	//this->state = new char[strlen(newState) + 1];
+	//strcpy(this->state, newState);
+
+	//this->city = new char[strlen(newCity) + 1];
+	//strcpy(this->city, newCity);
+
+	//this->street = new char[strlen(newStreet) + 1];
+	//strcpy(this->street, newStreet);
+
+	this->state = nullptr;
+	this->city = nullptr;
+	this->street = nullptr;
+
 	setState(newState);
 	setCity(newCity);
 	setStreet(newStreet);
@@ -46,8 +59,8 @@ char* address::getState() const
 void address::setCity(char* newCity)
 {
 	delete[] city;
-	city = new char[strlen(newCity) + 1];
-	strcpy(city, newCity);
+	this->city = new char[strlen(newCity) + 1];
+	strcpy(this->city, newCity);
 }
 
 char* address::getCity() const
@@ -58,8 +71,8 @@ char* address::getCity() const
 void address::setStreet(char* newStreet)
 {
 	delete[] street;
-	street = new char[strlen(newStreet) + 1];
-	strcpy(street, newStreet);
+	this->street = new char[strlen(newStreet) + 1];
+	strcpy(this->street, newStreet);
 }
 
 char* address::getStreet() const
@@ -85,4 +98,11 @@ void address::setAptNum(int newAptNum)
 int address::getAptNum() const
 {
 	return aptNum;
+}
+
+void address::show() const
+{
+	cout << "Address: " << endl;
+	cout << " State: " << this->state << ", city: " << this->city << endl;
+	cout << " Street: " << this->street << " number " << this->homeNum << ", apartment: " << this->aptNum << endl;
 }

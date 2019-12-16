@@ -34,6 +34,8 @@ public:
 	void setAptNum(int newAptNum);
 	int getAptNum() const;
 
+	void show() const;
+
 };
 
 #endif //_ADDRESS_H

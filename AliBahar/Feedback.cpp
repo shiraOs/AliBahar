@@ -8,7 +8,10 @@ feedback::feedback(const char* newDate, const char* newDescription, const Costum
 {
 	cout << "In Feedback's c'tor for " << newVen.getUserName() << endl;
 
-	setDate(newDate);
+	delete[] date;
+	date = new char[strlen(newDate) + 1];
+	strcpy(date, newDate);
+
 	setDescription(newDescription);
 }
 
@@ -50,14 +53,14 @@ const vendor* feedback::getVendor() const
 	return vendorP;
 }
 
-void feedback::setDate(const char* newDate)
-{
-	delete[] date;
-	date = new char[strlen(newDate) + 1];
-	strcpy(date, newDate);
-}
+//void feedback::setDate(const char* newDate)
+//{
+//	delete[] date;
+//	date = new char[strlen(newDate) + 1];
+//	strcpy(date, newDate);
+//}
 
-const char* feedback::getDate() const
+char* feedback::getDate() const
 {
 	return date;
 }
@@ -69,7 +72,7 @@ void feedback::setDescription(const char* newDcp)
 	strcpy(description, newDcp);
 }
 
-const char* feedback::getDescription() const
+char* feedback::getDescription() const
 {
 	return description;
 }

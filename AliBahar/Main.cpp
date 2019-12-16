@@ -1,8 +1,6 @@
-#include "Vendor.h"
-#include "Product.h"
 #include "Costumer.h"
-
-void printOptions();
+#include "Vendor.h"
+#include "System.h"
 
 void main()
 {
@@ -25,21 +23,10 @@ void main()
 		if (option == 5) { addProductToShoppingCart(allCostumers, costumerSize, allVendors, vendorSize); }
 		if (option == 6) { addOrderToPendingOrders(allCostumers, costumerSize); }
 		if (option == 7) { payOrder(allCostumers, costumerSize); }
-		//if (option == 8);
-		//if (option == 9);
-		//if (option == 10);
-		//if (option == 11);
+		if (option == 8) { showCostumersDetails(allCostumers, costumerSize); }
+		if (option == 9) { showVendorsDetails(allVendors, vendorSize); }
+		if (option == 10) { showProductsByName(allVendors, vendorSize); }
+		if (option == 11) { exit(1); }
 	}
-
-}
-
-void printOptions()
-{
-	cout << "What would you like to do?\n";
-	cout << "Add costumer - press 1\nAdd vendor - press2\nAdd product to vendor - press"
-		" 3\nAdd feedback to vendor - press 4\nAdd product to shopping cart - press 5\nAdd"
-		" order to costumer - press 6\nPayment for order - press 7\nShow all costumers"
-		" - press 8\nShow all vendors - press 9\nShow all products by name - press 10\n"
-		"EXIT - press 11\n";
 }
 

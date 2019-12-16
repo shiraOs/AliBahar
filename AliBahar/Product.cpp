@@ -46,7 +46,7 @@ void product::setName(char* newName)
 	strcpy(name, newName);
 }
 
-const char* product::getName() const
+char* product::getName() const
 {
 	return name;
 }
@@ -56,7 +56,7 @@ void product::setPrice(int newPrice)
 	price = newPrice;
 }
 
-const int product::getPrice() const
+int product::getPrice() const
 {
 	return price;
 }
@@ -66,7 +66,7 @@ const int product::getPrice() const
 //	serialNum = newSerialNum;
 //}
 
-const int product::getSerialNum() const
+int product::getSerialNum() const
 {
 	return serialNum;
 }
@@ -79,4 +79,11 @@ void product::setVendor(const vendor& newV)
 const vendor* product::getVendor() const
 {
 	return vendorP;
+}
+
+void product::showDetails() const
+{
+	cout << "Category: " << categories[this->category - 1] << " Name: " << this->name << endl;
+	cout << "Price: " << this->price << "¥" << endl;
+	cout<< "Serial Number: " << this->serialNum << endl;
 }
