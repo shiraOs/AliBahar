@@ -1,5 +1,4 @@
 #include "Vendor.h"
-#include "Address.h"
 #include "Product.h"
 #include "Feedback.h"
 #include "Costumer.h"
@@ -11,24 +10,6 @@ vendor::vendor(char* userName, char* password, const address& address, int produ
 	setUserName(userName);
 	setPassword(password);
 }
-
-//vendor::vendor(vendor& other)
-//{
-//	cout << "In Vendor's cpy c'tor for " << other.userName << endl;
-//
-//	setUserName(other.userName);
-//	setPassword(other.password);
-//	setHomeAddress(other.homeAddress);
-//	productAmount = other.productAmount;
-//	feedbackAmount = other.feedbackAmount;
-//
-//	for (int i = 0; i < productAmount; i++)
-//		allProducts[i] = new product(*(other.allProducts[i]));
-//
-//	for (int i = 0; i < feedbackAmount; i++)
-//		allFeedbacks[i] = new feedback(*(other.allFeedbacks[i]));
-//
-//}
 
 vendor::~vendor()
 {
@@ -126,15 +107,11 @@ int vendor::getProductAmount() const
 	return productAmount;
 }
 
-//int vendor::getFeedbackAmount() const
-//{
-//	return feedbackAmount;
-//}
-
 void vendor::showProducts() const
 {
 	for (int i = 0; i < productAmount; i++)
-		cout << i + 1 << ". " << allProducts[i]->getName() << " " << allProducts[i]->getPrice() << "¥" << endl;
+		cout << i + 1 << ". " << allProducts[i]->getName() << " " 
+		<< allProducts[i]->getPrice() << "$" << endl;
 }
 
 void vendor::showDetails() const
@@ -143,6 +120,3 @@ void vendor::showDetails() const
 	cout << "Password: " << this->password << endl;
 	this->homeAddress.show();
 }
-
-//**************************FUNCTIONS FROM MAIN*******************************************//
-

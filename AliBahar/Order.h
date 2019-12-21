@@ -12,19 +12,16 @@ class Order
 {
 private:
 	const product** purchases;
-	int totalPrice;
+	double totalPrice;
 	const Costumer* costumerP;
 	int productAmount;
 
 public:
-	Order(const Costumer& costumerP, int totalPrice = 0, int productAmount = 0);
+	Order(const Costumer& costumerP, double totalPrice = 0, int productAmount = 0);
 	Order(const Order& other);
 	~Order();
 
-	//void setTotalPrice(int newTotalPrice);
-	int getTotalPrice() const;
-
-	//void setProductAmount(int newProductAmount);
+	double getTotalPrice() const;
 	int getProductAmount() const;
 
 	void setCostumer(const Costumer& newCostumer);

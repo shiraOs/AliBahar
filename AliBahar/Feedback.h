@@ -25,11 +25,8 @@ public:
 	feedback(const feedback&) = delete;
 	~feedback();
 
-	//void setCostumer(const Costumer& newCtm);
 	const Costumer* getCostumer() const;
-	//void setVendor(vendor* newVen);
 	const vendor* getVendor() const;
-	//void setDate(const char* newDate);
 	char* getDate() const;
 	void setDescription(const char* newDcp);
 	char* getDescription() const;

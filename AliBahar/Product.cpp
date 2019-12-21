@@ -1,7 +1,7 @@
 #include "Product.h"
 #include "Vendor.h"
 
-product::product(eCategory newCategory, char* newName, int newPrice, int newSerialNum, const vendor& newV)
+product::product(eCategory newCategory, char* newName, double newPrice, int newSerialNum, const vendor& newV)
 	: category(newCategory), serialNum(newSerialNum)
 {
 	cout << "In Product's c'tor for " << newName << endl;
@@ -11,28 +11,14 @@ product::product(eCategory newCategory, char* newName, int newPrice, int newSeri
 	setVendor(newV);
 }
 
-//product::product(const product& other)
-//{
-//	cout << "In Product's cpy c'tor for " << other.name << endl;
-//
-//	setCategory(other.category);
-//	setName(other.name);
-//	setPrice(other.price);
-//	setSerialNum(other.serialNum);
-//	setVendor(other.vendorP);
-//}
-
 product::~product()
 {
 	cout << "In Product's d'tor for " << name << endl;
 
+	vendorP = nullptr;
 	delete[] name;
 }
 
-//void product::setCategory(eCategory newCategory)
-//{
-//	category = newCategory;
-//}
 
 const eCategory product::getCategory() const
 {
@@ -51,20 +37,15 @@ char* product::getName() const
 	return name;
 }
 
-void product::setPrice(int newPrice)
+void product::setPrice(double newPrice)
 {
 	price = newPrice;
 }
 
-int product::getPrice() const
+double product::getPrice() const
 {
 	return price;
 }
-
-//void product::setSerialNum(int newSerialNum)
-//{
-//	serialNum = newSerialNum;
-//}
 
 int product::getSerialNum() const
 {
@@ -83,7 +64,8 @@ const vendor* product::getVendor() const
 
 void product::showDetails() const
 {
-	cout << "Category: " << categories[this->category - 1] << " Name: " << this->name << endl;
-	cout << "Price: " << this->price << "¥" << endl;
-	cout<< "Serial Number: " << this->serialNum << endl;
+	cout << "Category: " << categories[this->category - 1] << endl;
+	cout << "Name: " << this->name << endl;
+	cout << "Price: " << this->price << "$" << endl;
+	cout << "Serial Number: " << this->serialNum << endl;
 }

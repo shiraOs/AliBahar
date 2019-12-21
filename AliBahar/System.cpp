@@ -1,5 +1,4 @@
 #include "System.h"
-#include "Address.h"
 #include "Costumer.h"
 #include "Feedback.h"
 #include "Order.h"
@@ -8,303 +7,120 @@
 
 void printOptions()
 {
-	cout << "What would you like to do?\n";
-	cout << "Add costumer - press 1\nAdd vendor - press2\nAdd product to vendor - press"
-		" 3\nAdd feedback to vendor - press 4\nAdd product to shopping cart - press 5\nAdd"
-		" order to costumer - press 6\nPayment for order - press 7\nShow all costumers"
-		" - press 8\nShow all vendors - press 9\nShow all products by name - press 10\n"
-		"EXIT - press 11\n";
+	cout << "What would you like to do? press number of desired option.\n";
+	cout << "1. Add costumer\n2. Add vendor\n3. Add product to vendor"
+		"\n4. Add feedback to vendor\n5. Add product to shopping cart\n6. Add"
+		" order to costumer\n7. Payment for order\n8. Show all costumers"
+		"\n9. Show all vendors\n10. Show all products by name\n"
+		"11. EXIT\n";
 }
 
-void addCostumer(Costumer** allCostumers, int* costumerSize)
+void addCostumer(Costumer**& allCostumers, int* costumerSize)		//option 1 from main
 {
-	char userName[MAX_LEN], password[MAX_LEN], state[MAX_ADD], city[MAX_ADD], street[MAX_ADD];
-	int homeNum, aptNum;
-
-	cin.ignore();
-	cout << "Please enter costumer's username: MAX 20" << endl;;		//check valid name
-	cin.getline(userName, MAX_LEN);
-
-	cout << "Please enter costumer's password: MAX 20" << endl;		//check valid pass
-	cin.getline(password, MAX_LEN);
-
-	cout << "Please enter costumer's state: MAX 20";		//check valid state
-	//cin.ignore();
-	cin.getline(state, MAX_LEN);
-
-	cout << "Please enter costumer's city: MAX 20";			//check valid city
-	//cin.ignore();
-	cin.getline(city, MAX_LEN);
-
-	cout << "Please enter costumer's street: MAX 20";		//check valid street
-	//cin.ignore();
-	cin.getline(street, MAX_LEN);
-
-	cout << "Please enter costumer's home number: ";		//check valid home number
-	//cin.ignore();
-	cin >> homeNum;
-
-	cout << "Please enter costumer's apartment number: ";	//check valid apt num
-	//cin.ignore();
-	cin >> aptNum;
-
-	allCostumers[(*costumerSize) - 1] = new Costumer(userName, password, address(state, city, street, homeNum, aptNum));
-	(*costumerSize)++;
-	Costumer** temp = new Costumer*[*costumerSize];
+	(*costumerSize)++;										//rise up the number of cotumers
+	Costumer** temp = new Costumer*[(*costumerSize)];		//create new temp arr of costumers
 	for (int i = 0; i < *costumerSize - 1; i++)
-	{
+	{//copy the old arr
 		temp[i] = allCostumers[i];
 		allCostumers[i] = nullptr;
 	}
 
-	delete[] allCostumers;
-	allCostumers = temp;	
+	//create a pointer to new costumer
+	temp[(*costumerSize) - 1] = readCostumer();
+	delete[] allCostumers;									//free memory of old arr
+	allCostumers = temp;									//put the new address to old arr
 }
 
-void addProductToShoppingCart(Costumer** allCostumers, int costumerSize, vendor** allVendors, int vendorSize)
-{
-	int i = 0, choice = 0, flagCostumer = 0, j = 0;
-
-	cout << "Choose product num or press 0 for more products." << endl;
-
-	while (choice == 0 && i < vendorSize)		//as long as there is no choice, keep showing products.
-	{
-		cout << "From vendor: " << allVendors[i]->getUserName() << endl;		//show who is the vendor
-		allVendors[i]->showProducts();
-		cin >> choice;							//choice -1 is the idx of the product at arr products of vendor number i
-		i++;
-	}
-
-	if (choice == 0)
-	{
-		cout << "No product has been chosen. Exit to menu" << endl;
-		return;
-	}
-
-	cout << "Press 1 to choose costumer to add the product to, else press 0." << endl;	//choose the costumer
-
-	while (flagCostumer == 0 && j < costumerSize)	//search for the wantes costumer. j is the number of the costumer
-	{
-		cout << "Costumer's name: " << allCostumers[j]->getUserName() << endl;
-		cin >> flagCostumer;	//1 if want the costumer, else 0;
-		j++;
-	}
-
-	if (flagCostumer == 0)
-	{
-		cout << "No costumer has been chosen. Exit to menu" << endl;
-		return;
-	}
-
-	//there are vendor, which product and the costumer who want the product
-	const product** currProducts = allVendors[i - 1]->getProducts();
-	allCostumers[j - 1]->addProduct(*currProducts[choice - 1]);
-}
-
-void addOrderToPendingOrders(Costumer** allCostumers, int costumerSize)				//add new order- from the main menu
-{
-	int i = 0, flagChoice = 0, j = 0, flagProduct = 0;
-
-	cout << "Press 1 to choose costumer to order for, or press 0 to the next costumer." << endl;	//choose the costumer
-
-	while (!flagChoice && i < costumerSize)			//choose who is the costumer
-	{
-		cout << "Costumer's name: " << allCostumers[i]->getUserName() << endl;
-		cin >> flagChoice;	//1 if want the costumer, else 0;
-		i++;
-	}
-
-	if (!flagChoice)			//no costumer. exit
-	{
-		cout << "No costumer has been chosen. Exit to menu" << endl;
-		return;
-	}
-
-	Order newOrder(*allCostumers[i - 1]);								//creat a new empty order
-	const product** currShoppingCart = allCostumers[i - 1]->getShoppingCart();
-	int shoppingCartSize = allCostumers[i - 1]->getShoppingCartSize();		//how many products to choose from
-
-	//int penOrderAmount = allCostumers[i - 1]->getPenOrdersAmount();		//size of oreders
-	//Order* CurrOrder = allCostumers[i - 1]->getPenOrders()[penOrderAmount - 1];	//order at the last place, the current order-last one to add
-
-	cout << "Press 1 to order the product, or press 0 to the next product." << endl;
-
-	while (j < shoppingCartSize)		//go over all the shopping cart press 1 to add product to new order
-	{
-		cout << "Product name: " << currShoppingCart[j]->getName() << " " << currShoppingCart[j]->getPrice() << " ¥" << endl;
-		cin >> flagProduct;
-
-		if (flagProduct)				//=1, want the product need to add to the order
-		{
-			newOrder.addProduct(*currShoppingCart[j]);		//add the new product to order and update the total price
-
-			//const product* productToAdd = allCostumers[i - 1]->getShoppingCart()[j];
-			//addProductToOrder(CurrOrder, productToAdd);
-		//	allCostumers[i - 1]->getPenOrders()[allCostumers[i - 1]->getPenOrdersAmount()]->addProduct(allCostumers[i - 1]->getShoppingCart()[j]);
-		}
-		j++;
-		flagProduct = 0;
-	}
-
-	allCostumers[i - 1]->addOrder(newOrder);
-}
-
-//void addOrderToPenOrders(Order& const newOrder, Costumer* currCostumer)
-//{//add new order for pending oreders arr
-//	int penOrderAmount = currCostumer->getPenOrdersAmount();					//get old amount
-//	currCostumer->setpenOrdersAmount(penOrderAmount + 1);						//add 1 to the amount
-//
-//	Order** penOrder = currCostumer->getPenOrders();						//get pending orders from the costumer
-//	Order** temp = new Order*[penOrderAmount+1];					//make a new array for the resize
-//	for (int i = 0; i < penOrderAmount; i++)			//cpy the old to the temp
-//		temp[i] = penOrder[i];
-//	temp[penOrderAmount] = &newOrder;				//add the new order
-//
-//	delete[] penOrder;								//clear the memory of the old array
-//	penOrder = temp;								//put the temp in the old one
-//}
-
-void payOrder(Costumer** allCostumers, int costumerSize)
-{
-	int i = 0, flagChoice = 0, j = 0, flagOrder = 0;
-
-	cout << "Press 1 to choose costumer to order for, or press 0 to the next costumer." << endl;	//choose the costumer
-
-	while (!flagChoice && i < costumerSize)			//choose who is the costumer who want to pay an order
-	{
-		cout << "Costumer's name: " << allCostumers[i]->getUserName() << endl;
-		cin >> flagChoice;	//1 if want the costumer, else 0;
-		i++;
-	}
-
-	if (flagChoice == 0)			//no costumer. exit
-	{
-		cout << "No costumer has been chosen. Exit to menu" << endl;
-		return;
-	}
-
-	const Order** currOrders = allCostumers[i - 1]->getPenOrders();
-	int orderAmount = allCostumers[i - 1]->getPenOrdersAmount();
-
-	cout << "Press 1 to pay that order, or press 0 to the next order." << endl;
-
-	while (!flagOrder && j < orderAmount)			//choose which order you want to pay
-	{
-		currOrders[j]->showProducts();
-		cin >> flagOrder;
-		j++;
-	}
-
-	if (flagChoice == 0)			//no order to pay for. exit
-	{
-		cout << "No order has been chosen. Exit to menu" << endl;
-		return;
-	}
-
-	//there is costumer i-1 with order j-1 to pay for
-	allCostumers[i - 1]->removeProductsFromShoppingCart(j - 1);
-
-	//remove order
-	allCostumers[i - 1]->removeOrderFromPenOrders(j - 1);
-}
-
-void showCostumersDetails(Costumer** allCostumers, int costumerSize)
-{
-	for (int i = 0; i < costumerSize; i++)
-		allCostumers[i]->showDetails();
-}
-
-void showVendorsDetails(vendor ** allVendors, int vendorSize)
-{
-	for (int i = 0; i < vendorSize; i++)
-		allVendors[i]->showDetails();
-}
-
-void showProductsByName(vendor ** allVendors, int vendorSize)
-{
-	char name[MAX_LEN];
-	int currProductAmount;
-
-	cout << "Enter product name: MAX 20" << endl;
-	cin.getline(name, MAX_LEN);
-
-	for (int i = 0; i < vendorSize; i++)
-	{
-		currProductAmount = allVendors[i]->getProductAmount();
-		const product** currProducts = allVendors[i]->getProducts();
-
-		for (int j = 0; j < currProductAmount; j++)
-		{
-			if (strcmp(name, currProducts[j]->getName()))
-				currProducts[j]->showDetails();
-		}		
-	}
-}
-
-
-//void addProductToOrder(Order* CurrOrder, const product* newProduct)		//get point to order and a new product to add to order
-//{
-//	int pAmount = CurrOrder->getProductAmount();	//old amount
-//	CurrOrder->setProductAmount(pAmount + 1);		//add one
-//	
-//	const product** purchases = CurrOrder->getPurchases();		//all products
-//	const product** temp = new const product*[pAmount+1];		//temp cpy to resize 
-//	for (int i = 0; i < pAmount; i++)
-//		temp[i] = purchases[i];
-//	temp[pAmount] = newProduct;
-//
-//	delete[] purchases;
-//	purchases = temp;
-//}
-
-void addVendor(vendor ** allVendors, int * vendorsSize)
+Costumer* readCostumer()
 {
 	char userName[MAX_LEN], password[MAX_LEN], state[MAX_ADD], city[MAX_ADD], street[MAX_ADD];
-	int homeNum, aptNum;
+	int homeNum = 0, aptNum = 0;
 
-	cout << "Please enter costumer's username: MAX 20";		//check valid name
 	cin.ignore();
+	cout << "Please enter costumer's username: maximum 20 chars" << endl;
 	cin.getline(userName, MAX_LEN);
 
-	cout << "Please enter costumer's password: MAX 20";		//check valid pass
-	cin.ignore();
+	cout << "Please enter costumer's password: maximum 20 chars" << endl;
 	cin.getline(password, MAX_LEN);
 
-	cout << "Please enter costumer's state: MAX 20";		//check valid state
-	cin.ignore();
+	cout << "Please enter costumer's state: maximum 20 chars" << endl;
 	cin.getline(state, MAX_LEN);
 
-	cout << "Please enter costumer's city: MAX 20";			//check valid city
-	cin.ignore();
+	cout << "Please enter costumer's city: maximum 20 chars" << endl;
 	cin.getline(city, MAX_LEN);
 
-	cout << "Please enter costumer's street: MAX 20";		//check valid street
-	cin.ignore();
+	cout << "Please enter costumer's street: maximum 20 chars" << endl;
 	cin.getline(street, MAX_LEN);
 
-	cout << "Please enter costumer's home number: ";		//check valid home number
-	cin.ignore();
-	cin >> homeNum;
-
-	cout << "Please enter costumer's apartment number: ";	//check valid apt num
-	cin.ignore();
-	cin >> aptNum;
-
-	allVendors[(*vendorsSize) - 1] = new vendor(userName, password, address(state, city, street, homeNum, aptNum));
-	(*vendorsSize)++;
-	vendor** temp = new vendor*[*vendorsSize];
-	for (int i = 0; i < *vendorsSize - 1; i++)
+	while (homeNum < 1)
 	{
+		cout << "Please enter costumer's home number:" << endl;
+		cin >> homeNum;
+	}
+
+	while (aptNum < 1)
+	{
+		cout << "Please enter costumer's apartment number:" << endl;
+		cin >> aptNum;
+	}
+
+	return new Costumer(userName, password, address(state, city, street, homeNum, aptNum));
+}
+
+void addVendor(vendor**& allVendors, int * vendorsSize)		//option 2 from main
+{
+	(*vendorsSize)++;										//rise up the number of vendors
+	vendor** temp = new vendor*[*vendorsSize];				//create new temp arr of vendors
+	for (int i = 0; i < *vendorsSize - 1; i++)
+	{//copy the old arr
 		temp[i] = allVendors[i];
 		allVendors[i] = nullptr;
 	}
 
-	delete[] allVendors;
-	allVendors = temp;
+	//create a pointer to new vendor
+	temp[(*vendorsSize) - 1] = readVendor();
+	delete[] allVendors;									//free memory of old arr
+	allVendors = temp;										//put the new address to old arr
 }
 
-void addPdtToVdr(vendor** allVendors, int vendorSize)		//from main
-{//gets an arr of vendors and its size, search for the wanted vendor and then add a product to his list.]
+vendor* readVendor()
+{
+	char userName[MAX_LEN], password[MAX_LEN], state[MAX_ADD], city[MAX_ADD], street[MAX_ADD];
+	int homeNum = 0, aptNum = 0;
+
+	cin.ignore();
+	cout << "Please enter vendor's username: maximum 20 chars" << endl;
+	cin.getline(userName, MAX_LEN);
+
+	cout << "Please enter vendor's password: maximum 20 chars" << endl;
+	cin.getline(password, MAX_LEN);
+
+	cout << "Please enter vendor's state: maximum 20 chars" << endl;
+	cin.getline(state, MAX_LEN);
+
+	cout << "Please enter vendor's city: maximum 20 chars" << endl;
+	cin.getline(city, MAX_LEN);
+
+	cout << "Please enter vendor's street: maximum 20 chars" << endl;
+	cin.getline(street, MAX_LEN);
+
+	while (homeNum < 1)
+	{
+		cout << "Please enter vendor's home number:" << endl;
+		cin >> homeNum;
+	}
+
+	while (aptNum < 1)
+	{
+		cout << "Please enter vendor's apartment number: " << endl;
+		cin >> aptNum;
+	}
+
+	return new vendor(userName, password, address(state, city, street, homeNum, aptNum));
+}
+
+void addPdtToVdr(vendor**& allVendors, int vendorSize)		//option 3 from main
+{//gets an arr of vendors and its size, search for the wanted vendor and then add a product to his list.
 	int i = 0, flagVendor = 0;
 
 	cout << "Press 1 to choose the curr vendor, or press 0 to the next one." << endl;
@@ -315,57 +131,60 @@ void addPdtToVdr(vendor** allVendors, int vendorSize)		//from main
 		i++;
 	}
 
-	//char vendorName[MAX_LEN];
-	//cout << "Enter vendor's name: ";
-	//cin.getline(vendorName, MAX_LEN);
-	//cout << endl;
-	//int i = 0;
-	//while (strcmp(allVendors[i]->getUserName(), vendorName) != 0 && i < vendorSize)
-	//	i++;
-
 	if (!flagVendor)
 	{
 		cout << "No vendor has been chosen. Return to main menu." << endl;
 		return;
 	}
 
-	eCategory category;
-	char pdtName[MAX_LEN];
-	int c, price, serialNumber;
+	//create new pointer to a new product
+	product* p = readProduct(allVendors, vendorSize, i - 1);
+	allVendors[i - 1]->addProduct(*p);		//add the product to the list
 
-	cout << "Enter product category:\n 1. Kids \n 2. Electricity \n 3. Office \n 4. Clothing" << endl;
-	cin >> c;
-	category = (eCategory)c;
-
-	cout << "Enter product name: (no more then 20 letters)";
-	cin.getline(pdtName, MAX_LEN);
-	cout << endl;
-
-	cout << "Enter product's price: ";
-	cin >> price;
-	cout << endl;
-
-	cout << "Enter product's serial number: ";		//check valid
-	cin >> serialNumber;
-	cout << endl;
-
-	allVendors[i - 1]->addProduct(product(category, pdtName, price, serialNumber, *allVendors[i - 1]));
 }
 
-void addFeedback(Costumer** allCostumers, int costumerSize, vendor** allVendors, int vendorSize)		//from main
+product* readProduct(vendor**& allVendors, int vendorsSize, int vendorIdx)
+{
+	eCategory category;
+	char pdtName[MAX_LEN];
+	int c = 0, serialNumber = 0;
+	double price = 0;
+
+	cin.ignore();
+	while (c > categoriesAmount || c < 1)
+	{
+		cout << "Enter product category:\n 1. Kids \n 2. Electricity \n 3. Office \n 4. Clothing" << endl;
+		cin >> c;
+	}
+	category = (eCategory)c;
+
+	cin.ignore();
+
+	cout << "Enter product name: maximum 20 chars" << endl;
+	cin.getline(pdtName, MAX_LEN);
+
+	while (price < 1)
+	{
+		cout << "Enter product's price:" << endl;
+		cin >> price;
+	}
+
+	do
+	{
+		cout << "Enter product's serial number:" << endl;
+		cin >> serialNumber;
+	} while (serialNumber < 1 || !checkSerialNumber(allVendors, serialNumber, vendorsSize));	//check if serial number valid
+
+	return new product(category, pdtName, price, serialNumber, *(allVendors[vendorIdx]));
+}
+
+void addFeedback(Costumer**& allCostumers, int costumerSize, vendor**& allVendors, int vendorSize)	//option 4 from main
 {//gets arr of costumers and its size, search for the wanted costumer, then choose the vendor and add a feedback
-
-	//cout << "Enter costumer's name: ";
-	//cin.getline(costumerName, MAX_LEN);
-	//cout << endl;
-	//while (strcmp(allCostumers[i]->getUserName(), costumerName) != 0 && i < costumerSize)		//check if costumer exist
-	//	i++;
-
 	int i = 0, flagCostumer = 0, j = 0, flagVendor = 0, v = 0;
 
 	cout << "Press 1 to choose the curr costumer, or press 0 to the next one." << endl;
-	while (!flagCostumer && i < costumerSize)				//print every time costumer's name, if press 1 go out the loop. costumer num i-1
-	{
+	while (!flagCostumer && i < costumerSize)
+	{//print every time costumer's name, if press 1 go out the loop. costumer num i-1
 		cout << "Costumer's name: " << allCostumers[i]->getUserName() << endl;
 		cin >> flagCostumer;
 		i++;
@@ -377,18 +196,18 @@ void addFeedback(Costumer** allCostumers, int costumerSize, vendor** allVendors,
 		return;
 	}
 
-	//cout << "Enter vendor's name: ";
-	//cin.getline(vendorName, MAX_LEN);
-	//cout << endl;
-	//while (strcmp(allCostumers[i]->getAllVendors()[j]->getUserName(), vendorName) != 0 && j < allCostumers[i]->getVendorsAmount())
-	//	//there is costumer, check if there is vendor at costumer's vendors
-	//	j++;
 	int vendorsAmount = allCostumers[i - 1]->getVendorsAmount();			//gets the amount of vendors in curr costumer
-	const vendor** currVendors = allCostumers[i - 1]->getAllVendors();			//gets the list of vendors of curr costumer
+	const vendor** currVendors = allCostumers[i - 1]->getAllVendors();		//gets the list of vendors of curr costumer
+
+	if (vendorsAmount == 0)
+	{
+		cout << "No vendors to feedback! return to menu." << endl;
+		return;
+	}
 
 	cout << "Press 1 to choose the curr vendor, or press 0 to the next one." << endl;
-	while (!flagVendor && j < vendorsAmount)				//print every time vendor's name, if press 1 go out the loop. vendor num j-1
-	{
+	while (!flagVendor && j < vendorsAmount)
+	{//print every time vendor's name, if press 1 go out the loop. vendor num j-1
 		cout << "Vendor's name: " << currVendors[j]->getUserName() << endl;
 		cin >> flagVendor;
 		j++;
@@ -400,22 +219,224 @@ void addFeedback(Costumer** allCostumers, int costumerSize, vendor** allVendors,
 		return;
 	}
 
-	//there is costumer and vendor in his list, find the vendor in all vendors from main, and ask for date and feedback
-
-	while (currVendors[j] != allVendors[v])
+	//there is costumer and vendor in his list
+	//find the vendor j-1 in all vendors from main, and ask for date and feedback
+	while (currVendors[j-1] != allVendors[v])
 		v++;
 
-	char date[MAX_LEN], feedbackDes[MAX_FEE];
+	//create a new pointer to a new feedback
+	feedback* f = readFeedback(*allCostumers[i - 1], *allVendors[v]);
+	allVendors[v]->addFeedback(*f);		//add the new feedback to vendors list of feedbacks
+}
 
-	cout << "Enter today's date name: ";			//check valid
-	cin.getline(date, MAX_LEN);
-	cout << endl;
+feedback* readFeedback(Costumer& costumer, vendor& vendor)
+{
+	char date[DATE_LEN], feedbackDes[MAX_FEE];
+	bool flagDate = false;
+	int day, month, year;
+	cin.ignore();
+	while (!flagDate)
+	{
+		cout << "Enter today's date name: dd/mm/yyyy" << endl;			//check valid
+		cin.getline(date, DATE_LEN);
+		day = 10 * (int)(date[0] - '0') + (int)(date[1] - '0');
+		month = 10 * (int)(date[3] - '0') + (int)(date[4] - '0');
+		year = 1000 * (int)(date[6] - '0') + 100 * (int)(date[7] - '0') + 10 * (int)(date[8]-'0') + (int)(date[9]-'0'); 
+		if ((day < 1 || day>31) || (month < 1 || month>12) || (year > 2019) || (date[2]!='/') || (date[5]!='/'))
+			flagDate = false;
+		else
+			flagDate = true; 
+		
+	}
 
-	cout << "Enter your feedback: ";
+	cout << "Enter your feedback: maximum 100 chars " << endl; 
 	cin.getline(feedbackDes, MAX_FEE);
-	cout << endl;
+	return new feedback(date, feedbackDes, costumer, vendor);
+}
 
-	allVendors[v]->addFeedback(feedback(date, feedbackDes, *allCostumers[i - 1], *allVendors[v]));
+void addProductToShoppingCart(Costumer**& allCostumers, int costumerSize, vendor**& allVendors, int vendorSize)
+{//option 5 from main
+	int i = 0, choice = 0, flagCostumer = 0, j = 0;
 
-	//allCostumers[i]->getAllVendors()[j]->addFeedback(feedback(date, feedbackDes, allCostumers[i], allCostumers[i]->getAllVendors()[j]));
+	cout << "Choose product num or press 0 for more products." << endl;
+	while (choice == 0 && i < vendorSize)		
+	{//search for the wanted product. choice-1 is the idx of the product at arr products of vendor number i-1
+		cout << "From vendor: " << allVendors[i]->getUserName() << endl;		//show who is the vendor
+		allVendors[i]->showProducts();
+		cin >> choice;
+		i++;
+	}
+
+	if (choice == 0)
+	{
+		cout << "No product has been chosen. Exit to menu" << endl;
+		return;
+	}
+
+	cout << "Press 1 to choose costumer to add the product to, or press 0 for another costumer." << endl;
+	while (flagCostumer == 0 && j < costumerSize)	
+	{//search for the wanted costumer. j-1 is the idx of the costumer in allcostumers arr
+		cout << "Costumer's name: " << allCostumers[j]->getUserName() << endl;
+		cin >> flagCostumer;
+		j++;
+	}
+
+	if (flagCostumer == 0)
+	{
+		cout << "No costumer has been chosen. Exit to menu" << endl;
+		return;
+	}
+
+	//there is vendor, whith product and the costumer who want the product
+	const product** currProducts = allVendors[i - 1]->getProducts();	//get the products list from vendor
+	allCostumers[j - 1]->addProduct(*currProducts[choice - 1]);			//add the pointed product to costumer's shopping list
+}
+
+void addOrderToPendingOrders(Costumer**& allCostumers, int costumerSize)			//option 6 from main
+{
+	int i = 0, flagChoice = 0, j = 0, flagProduct = 0;
+
+	cout << "Press 1 to choose costumer to order for, or press 0 to the next costumer." << endl;	
+	while (!flagChoice && i < costumerSize)	
+	{//print every time costumer's name, if press 1 go out the loop. costumer num i-1
+		cout << "Costumer's name: " << allCostumers[i]->getUserName() << endl;
+		cin >> flagChoice;
+		i++;
+	}
+
+	if (!flagChoice)			
+	{//no costumer. exit
+		cout << "No costumer has been chosen. Exit to menu" << endl;
+		return;
+	}
+
+	if (allCostumers[i-1]->getShoppingCartSize() == 0)
+	{//no products to shop. exit
+		cout << "No products in shopping cart. Exit to menu" << endl;
+		return;
+	}
+
+	//create new pointer to new order
+	Order* newOrder = new Order(*allCostumers[i - 1]);
+	const product** currShoppingCart = allCostumers[i - 1]->getShoppingCart();	//gets shopping cart from costumer
+	int shoppingCartSize = allCostumers[i - 1]->getShoppingCartSize();			//gets how many products to choose from
+
+
+	cout << "Press 1 to order the product, or press 0 to the next product." << endl;
+	while (j < shoppingCartSize)
+	{//print every time costumer's product, if press 1 add products to order else keep showing next products until no more
+		cout << "Product name: " << currShoppingCart[j]->getName() << " " << currShoppingCart[j]->getPrice() << " ¥" << endl;
+		cin >> flagProduct;
+
+		if (flagProduct)				
+		{//flagProduct=1, want the product. Add the new product to order and update the total price
+			newOrder->addProduct(*currShoppingCart[j]);		
+		}
+		j++;
+		flagProduct = 0;
+	}
+
+	if (newOrder->getProductAmount() == 0)
+		delete newOrder; 
+	else
+		allCostumers[i - 1]->addOrder(*newOrder);
+}
+
+void payOrder(Costumer**& allCostumers, int costumerSize)		//option 7 from main
+{
+	int i = 0, flagChoice = 0, j = 0, flagOrder = 0;
+
+	cout << "Press 1 to choose costumer to order for, or press 0 to the next costumer." << endl;
+	while (!flagChoice && i < costumerSize)			
+	{//print every time costumer's name, if press 1 go out the loop. costumer num i-1
+		cout << "Costumer's name: " << allCostumers[i]->getUserName() << endl;
+		cin >> flagChoice;
+		i++;
+	}
+
+	if (flagChoice == 0)
+	{//no costumer. exit
+		cout << "No costumer has been chosen. Exit to menu" << endl;
+		return;
+	}
+
+	const Order** currOrders = allCostumers[i - 1]->getPenOrders();		//gets all orders from costumer
+	int orderAmount = allCostumers[i - 1]->getPenOrdersAmount();		//gets how many orders there are
+
+	if (orderAmount == 0)
+	{
+		cout << "No orders to pay for. return menu." << endl;
+		return;
+	}
+
+	cout << "Press 1 to pay that order, or press 0 to the next order." << endl;
+	while (!flagOrder && j < orderAmount)
+	{//print every time costumer's order, if press 1 go out the loop. order num j-1
+		currOrders[j]->showProducts();
+		cin >> flagOrder;
+		j++;
+	}
+
+	if (flagOrder == 0)
+	{//no order to pay for. exit
+		cout << "No order has been chosen. Exit to menu" << endl;
+		return;
+	}
+
+	//there is costumer i-1 with order j-1 to pay for
+	allCostumers[i - 1]->removeProductsFromShoppingCart(j - 1);
+
+	//add vendor to vendors list
+	allCostumers[i - 1]->addVendorToVendorsList(j - 1);
+
+	//remove order
+	allCostumers[i - 1]->removeOrderFromPenOrders(j - 1);
+}
+
+void showCostumersDetails(Costumer**& allCostumers, int costumerSize)		//option 8 from main
+{
+	for (int i = 0; i < costumerSize; i++)
+		allCostumers[i]->showDetails();
+}
+
+void showVendorsDetails(vendor**& allVendors, int vendorSize)		//option 9 from main
+{
+	for (int i = 0; i < vendorSize; i++)
+		allVendors[i]->showDetails();
+}
+
+void showProductsByName(vendor**& allVendors, int vendorSize)		//option 10 from main
+{
+	char name[MAX_LEN];
+	int currProductAmount;
+
+	cin.ignore();
+	cout << "Enter product name: MAX 20" << endl;
+	cin.getline(name, MAX_LEN);
+
+	for (int i = 0; i < vendorSize; i++)
+	{
+		currProductAmount = allVendors[i]->getProductAmount();
+		const product** currProducts = allVendors[i]->getProducts();
+
+		for (int j = 0; j < currProductAmount; j++)
+		{
+			if (strcmp(name, currProducts[j]->getName()) == 0)
+				currProducts[j]->showDetails();
+		}		
+	}
+}
+
+bool checkSerialNumber(vendor**& allvendors, int seriealNumber, int allVendorSize)
+{
+	for (int i = 0; i < allVendorSize; i++)
+	{
+		for (int j = 0; j < allvendors[i]->getProductAmount(); j++)
+		{
+			const product** currProducts = allvendors[i]->getProducts(); 
+			if (seriealNumber == currProducts[j]->getSerialNum())
+				return false; 
+		}
+	}
+	return true;
 }

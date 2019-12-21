@@ -1,6 +1,5 @@
 #include "Costumer.h"
 #include "Vendor.h"
-#include "Address.h"
 #include "Product.h"
 #include "Order.h"
 
@@ -12,28 +11,6 @@ Costumer::Costumer(char* userName, char* password, const address& address,
 	setUserName(userName);
 	setPassword(password);
 }
-
-//Costumer::Costumer(const Costumer& other)
-//{
-//	cout << "In Costumer's cpy c'tor for " << other.userName << endl;
-//
-//	setUserName(other.userName);
-//	setPassword(other.password);
-//	setAddress(other.homeAddress);
-//
-//	shoppingCartSize = other.shoppingCartSize;
-//	vendorsAmount = other.vendorsAmount;
-//
-//	for (int i = 0; i < shoppingCartSize; i++)
-//		shoppingCart[i] = new product(*(other.shoppingCart[i]));
-//
-//	for (int i = 0; i < vendorsAmount; i++)
-//		allVendors[i] = new vendor(*(other.allVendors[i]));
-//
-//	for (int i = 0; i < penOrdersAmount; i++)
-//		pendingOrders[i] = new Order(*(other.pendingOrders[i]));
-//	
-//}
 
 Costumer::~Costumer()
 {
@@ -51,7 +28,7 @@ Costumer::~Costumer()
 	delete[] allVendors;							//free allocation of main arr
 
 	for (int i = 0; i < penOrdersAmount; i++)		//free object of orders
-		delete pendingOrders[i];
+		delete pendingOrders[i];					//free original object memory
 	delete[] pendingOrders;							//free allocation of main arr
 
 }
@@ -124,13 +101,14 @@ void Costumer::addVendor(const vendor& newVendor)
 	delete[] allVendors;
 	allVendors = temp;
 }
+
 const vendor** Costumer::getAllVendors() const
 {
 	return allVendors;
 }
 
-void Costumer::addOrder(const Order newOrder)
-{
+void Costumer::addOrder(const Order& newOrder)
+{//add order to all orders arr
 	penOrdersAmount++;
 	const Order** temp = new const Order*[penOrdersAmount];
 	for (int i = 0; i < penOrdersAmount - 1; i++)
@@ -165,61 +143,87 @@ int Costumer::getPenOrdersAmount() const
 }
 
 void Costumer::removeProductsFromShoppingCart(int orderNum)
-{
-	int i = 0, tempI = 0;
+{//after paying an order- remove purchased products from cart
 	int shoppingCartSize = getShoppingCartSize(), orderNumOfProducts = pendingOrders[orderNum]->getProductAmount();
-	const product** orderProducts = pendingOrders[orderNum]->getPurchases();	//get the products arr from the wanted order
-	int newShoppingCartSize = shoppingCartSize - orderNumOfProducts;
-	const product** tempCart = new const product*[newShoppingCartSize];			//new shopping cart
-	int* removeIdx=new int [orderNumOfProducts];		//save the index of products to remove from shopping cart
+	const product** orderProducts = pendingOrders[orderNum]->getPurchases();	//gets the products arr from the wanted order
 
 	for (int j = 0; j < orderNumOfProducts; j++)
 	{
-		while (orderProducts[j] != shoppingCart[i] && i < shoppingCartSize)		//go all over the product
-		{//check until find match in products
-			i++;
-		}
-		removeIdx[tempI] = i;		//save the equal product
-		tempI++;
-		i = 0;
-	}
-	
-	tempI = 0, i=0;
-
-	for (int j = 0; j < shoppingCartSize; j++)
-	{
-		if (j = removeIdx[tempI])
-			tempI++;
-		else
+		for (int i = 0; i < shoppingCartSize; i++)
 		{
-			tempCart[i] = shoppingCart[j];
-			shoppingCart[j] = nullptr;
-			i++;
+			if (orderProducts[j] == this->shoppingCart[i])	//if the same product, reset the pointer at shopping cart
+				this->shoppingCart[i] = nullptr;
 		}
 	}
 
-	delete[] shoppingCart;
+	//make a new shopping cart-remove all null pointers
+	int newShoppingCartSize = shoppingCartSize - orderNumOfProducts, tempI = 0;
+	const product** tempCart = new const product*[newShoppingCartSize];			//new shopping cart
+
+	for (int i = 0; i < this->shoppingCartSize; i++)
+	{
+		if (this->shoppingCart[i] != nullptr)
+		{//if not removed prudcts. copy to temp arr
+			tempCart[tempI] = shoppingCart[i];
+			shoppingCart[i] = nullptr;
+			tempI++;								//rise up temp cart index
+		}
+	}
+
+	delete[] shoppingCart;							//free memory old cart
 	shoppingCart = tempCart;
-	shoppingCartSize = newShoppingCartSize;
-	delete[] removeIdx;
+	this->shoppingCartSize = newShoppingCartSize;	//update to new size
 }
 
 void Costumer::removeOrderFromPenOrders(int orderNum)
-{
+{//delete order after paying
 	penOrdersAmount--;
-	const Order** temp = new const Order*[penOrdersAmount];
-	int tempI = 0;
-	for (int i = 0; i < penOrdersAmount+1; i++)
+	if (penOrdersAmount > 0)
 	{
-		if (i != orderNum)
+		const Order** temp = new const Order*[penOrdersAmount];
+		int tempI = 0;
+		for (int i = 0; i < penOrdersAmount + 1; i++)
 		{
-			temp[tempI] = pendingOrders[i];
-			pendingOrders[i] = nullptr;
-			tempI++;
+			if (i != orderNum)
+			{//copy all other orders
+				temp[tempI] = pendingOrders[i];
+				pendingOrders[i] = nullptr;
+				tempI++;
+			}
+			else
+				delete pendingOrders[i];	//free memory of order
+		}
+		delete[] pendingOrders;
+		pendingOrders = temp;
+	}
+	else
+	{//had only one order-needs to be removed
+		delete pendingOrders[penOrdersAmount];
+		pendingOrders = nullptr;
+	}
+}
+
+void Costumer::addVendorToVendorsList(int orderNum)
+{//after paying an order, add vendors (one time each) of purchased products.
+	const product** currOrder = this->pendingOrders[orderNum]->getPurchases();
+	int numOfProducts = this->pendingOrders[orderNum]->getProductAmount();
+
+	for (int i = 0; i < numOfProducts; i++)
+	{
+		if (!checkVendor((*currOrder)[i]))
+		{//needs to add the new vendor to vendors list
+			const vendor* v = (*currOrder)[i].getVendor();
+			this->addVendor(*v);
 		}
 	}
-	delete[] pendingOrders;
-	pendingOrders = temp;
+}
+
+bool Costumer::checkVendor(const product& currProduct)
+{//gets product from order, check if its vendor in vendors list
+	for (int i = 0; i < vendorsAmount; i++)
+		if (currProduct.getVendor() == this->allVendors[i])
+			return true;
+	return false;
 }
 
 void Costumer::showDetails() const
@@ -229,11 +233,4 @@ void Costumer::showDetails() const
 	this->homeAddress.show();
 }
 
-
-//void Costumer::setpenOrdersAmount(int newPenAmount)
-//{
-//	penOrdersAmount = newPenAmount;
-//}
-
-//*****************************FUNCTIONS FROM MAIN****************************************//
 

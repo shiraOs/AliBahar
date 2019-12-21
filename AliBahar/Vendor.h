@@ -12,7 +12,7 @@ class Costumer;
 
 #pragma warning (disable: 4996)
 
-const int MAX_LEN = 20;
+//const int MAX_LEN = 20;
 
 class vendor
 {
@@ -46,8 +46,6 @@ public:
 	const feedback** getfeedback() const;
 
 	int getProductAmount() const;
-	//int getFeedbackAmount() const;
-
 	void showProducts() const;
 	void showDetails() const;
 };

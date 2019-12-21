@@ -25,7 +25,6 @@ private:
 	int penOrdersAmount;
 
 public:
-	//Costumer() = default;
 	Costumer(char* userName, char* password, const address& address, int shoppingCartSize=0, 
 		int vendorsAmount=0, int penOrdersAmount=0);
 	Costumer(const Costumer&)=delete;
@@ -46,7 +45,7 @@ public:
 	void addVendor(const vendor& newVendor);
 	const vendor** getAllVendors() const;
 
-	void addOrder(const Order newOrder);
+	void addOrder(const Order& newOrder);
 	const Order** getPenOrders() const;
 
 	int getShoppingCartSize() const;
@@ -54,10 +53,10 @@ public:
 	int getPenOrdersAmount() const;
 
 	void removeProductsFromShoppingCart(int orderNum);
+	void addVendorToVendorsList(int orderNum);
+	bool checkVendor(const product& currProduct);
 	void removeOrderFromPenOrders(int orderNum);
 	void showDetails() const;
-
-//	void setpenOrdersAmount(int newPenAmount);
 };
 
 #endif // !_COSTUMER_H

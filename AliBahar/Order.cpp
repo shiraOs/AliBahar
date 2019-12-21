@@ -2,17 +2,12 @@
 #include "Costumer.h"
 #include "Product.h"
 
-Order::Order(const Costumer& costumerP, int totalPrice, int productAmount) : costumerP(&costumerP)
+Order::Order(const Costumer& costumerP, double totalPrice, int productAmount) : costumerP(&costumerP)
 {
 	cout << "In Order's c'tor for " << costumerP.getUserName() << endl;
 
 	this->totalPrice = totalPrice;
 	this->productAmount = productAmount;
-
-	/*setTotalPrice(totalPrice);
-	setProductAmount(productAmount);*/
-
-	//purchases = new product*[productAmount];
 }
 
 Order::Order(const Order& other)
@@ -22,10 +17,6 @@ Order::Order(const Order& other)
 	this->totalPrice = other.totalPrice;
 	this->productAmount = other.productAmount;
 	this->costumerP = other.costumerP;
-
-	/*setTotalPrice(other.totalPrice);
-	setProductAmount(other.productAmount);
-	setCostumer(*other.costumerP);*/
 
 	purchases = new const product*[productAmount];
 
@@ -40,23 +31,14 @@ Order::~Order()
 	for (int i = 0; i < productAmount; i++)		//init the pointers to products
 		purchases[i] = nullptr;
 
+	costumerP = nullptr;
 	delete[] purchases;							//remove the allocation of main arr
 }
 
-//void Order::setTotalPrice(int newTotalPrice)
-//{
-//	totalPrice = newTotalPrice;
-//}
-
-int Order::getTotalPrice() const
+double Order::getTotalPrice() const
 {
 	return totalPrice;
 }
-
-//void Order::setProductAmount(int newProductAmount)
-//{
-//	productAmount = newProductAmount;
-//}
 
 int Order::getProductAmount() const
 {
@@ -98,10 +80,7 @@ void Order::showProducts() const
 {
 	for (int i = 0; i < productAmount; i++)
 		cout << i + 1 << ". " << purchases[i]->getName() << "...................."
-		<< purchases[i]->getPrice() << "¥" << endl;
+		<< purchases[i]->getPrice() << "$" << endl;
 
-	cout << "Total price: " << totalPrice << endl;
+	cout << "Total price: " << totalPrice << "$" << endl;
 }
-
-/**************************************************************/
-

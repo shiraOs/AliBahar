@@ -15,16 +15,6 @@ feedback::feedback(const char* newDate, const char* newDescription, const Costum
 	setDescription(newDescription);
 }
 
-//feedback::feedback(const feedback& other)
-//{
-//	cout << "In Feedback's cpy c'tor for " << other.costumerP->getUserName() << endl;
-//	
-//	setDate(other.date);
-//	setDescription(other.description);
-//	setCostumer(other.costumerP);
-//	setVendor(other.vendorP);
-//}
-
 feedback::~feedback()
 {
 	cout << "In Feedback's d'tor for " << vendorP->getUserName() << endl;
@@ -33,32 +23,15 @@ feedback::~feedback()
 	delete[] description;
 }
 
-//void feedback::setCostumer(const Costumer& newCtm)
-//{
-//	costumerP = &newCtm;
-//}
-
 const Costumer* feedback::getCostumer() const
 {
 	return costumerP;
 }
-//
-//void feedback::setVendor(vendor* newVen)
-//{
-//	vendorP = newVen;
-//}
 
 const vendor* feedback::getVendor() const
 {
 	return vendorP;
 }
-
-//void feedback::setDate(const char* newDate)
-//{
-//	delete[] date;
-//	date = new char[strlen(newDate) + 1];
-//	strcpy(date, newDate);
-//}
 
 char* feedback::getDate() const
 {

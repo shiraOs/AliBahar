@@ -4,15 +4,6 @@ address::address(char* newState, char* newCity, char* newStreet, int newHomeNum,
 {
 	cout << "In Address's c'tor for " << newState << endl;
 
-	//this->state = new char[strlen(newState) + 1];
-	//strcpy(this->state, newState);
-
-	//this->city = new char[strlen(newCity) + 1];
-	//strcpy(this->city, newCity);
-
-	//this->street = new char[strlen(newStreet) + 1];
-	//strcpy(this->street, newStreet);
-
 	this->state = nullptr;
 	this->city = nullptr;
 	this->street = nullptr;

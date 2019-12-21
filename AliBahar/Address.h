@@ -18,7 +18,6 @@ private:
 	int aptNum;
 
 public:
-	//address() = default;
 	address(char* newState, char* newCity, char* newStreet, int newHomeNum, int newAptNum);
 	address(const address& other);
 	~address();

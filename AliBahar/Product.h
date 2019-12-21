@@ -9,31 +9,30 @@ class vendor;
 
 #pragma warning (disable: 4996)
 
-const int MAX_PRO = 20;
+//const int MAX_PRO = 20;
 enum eCategory { KIDS=1, ELECTRICITY=2, OFFICE=3, CLOTHING=4 };
 static const char* categories[] = { "Kids", "Electricity", "Office", "Clothing" };
+static const int categoriesAmount = 4;
 
 class product
 {
 private:
 	const eCategory category;
 	char* name;
-	int price;
+	double price;
 	const int serialNum;
 	const vendor* vendorP;
 
 public:
-	product(eCategory newCategory, char* newName, int newPrice, int newSerialNum,const vendor& newV);
+	product(eCategory newCategory, char* newName, double newPrice, int newSerialNum,const vendor& newV);
 	product(const product&) = delete;
 	~product();
 
-	//void setCategory(eCategory newCategory);
 	const eCategory getCategory() const;
 	void setName(char* newName);
 	char* getName() const;
-	void setPrice(int newPrice);
-	int getPrice() const;
-	//void setSerialNum(int newSerialNum);
+	void setPrice(double newPrice);
+	double getPrice() const;
 	int getSerialNum() const;
 	void setVendor(const vendor& newV);
 	const vendor* getVendor() const;
