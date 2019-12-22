@@ -12,8 +12,6 @@ class Costumer;
 
 #pragma warning (disable: 4996)
 
-//const int MAX_LEN = 20;
-
 class vendor
 {
 private:

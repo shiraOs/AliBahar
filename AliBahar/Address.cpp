@@ -2,8 +2,6 @@
 
 address::address(char* newState, char* newCity, char* newStreet, int newHomeNum, int newAptNum)
 {
-	cout << "In Address's c'tor for " << newState << endl;
-
 	this->state = nullptr;
 	this->city = nullptr;
 	this->street = nullptr;
@@ -17,8 +15,6 @@ address::address(char* newState, char* newCity, char* newStreet, int newHomeNum,
 
 address::address(const address& other)
 {
-	cout << "In Address's copy c'tor for " << other.state << endl;
-
 	setState(other.state);
 	setCity(other.city);
 	setStreet(other.street);
@@ -28,8 +24,6 @@ address::address(const address& other)
 
 address::~address()
 {
-	cout << "In Address's d'tor for " << state << endl;
-
 	delete[] state;
 	delete[] city;
 	delete[] street;

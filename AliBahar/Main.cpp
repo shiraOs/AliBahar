@@ -12,7 +12,7 @@ void main()
 	{
 		printOptions();
 		cin >> option;
-		
+
 		if (option == 1) { addCostumer(allCostumers, &costumerSize); }	
 		if (option == 2) { addVendor(allVendors, &vendorSize); }
 		if (option == 3) { addPdtToVdr(allVendors, vendorSize); }
@@ -23,8 +23,9 @@ void main()
 		if (option == 8) { showCostumersDetails(allCostumers, costumerSize); }
 		if (option == 9) { showVendorsDetails(allVendors, vendorSize); }
 		if (option == 10) { showProductsByName(allVendors, vendorSize); }
-		if (option == 11) { exit(1); }
-		cout << "********************************************" << endl;
+		cout << endl << "********************************************" << endl;
 	}
+	if (option == 11) { freeMemory(allVendors, vendorSize, allCostumers, costumerSize); }
+	system("pause");
 }
 

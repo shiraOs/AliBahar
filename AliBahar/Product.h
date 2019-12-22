@@ -9,7 +9,6 @@ class vendor;
 
 #pragma warning (disable: 4996)
 
-//const int MAX_PRO = 20;
 enum eCategory { KIDS=1, ELECTRICITY=2, OFFICE=3, CLOTHING=4 };
 static const char* categories[] = { "Kids", "Electricity", "Office", "Clothing" };
 static const int categoriesAmount = 4;

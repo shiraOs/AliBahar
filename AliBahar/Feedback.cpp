@@ -6,8 +6,6 @@
 feedback::feedback(const char* newDate, const char* newDescription, const Costumer& newCtm, const vendor& newVen)
 	: costumerP(&newCtm), vendorP(&newVen)
 {
-	cout << "In Feedback's c'tor for " << newVen.getUserName() << endl;
-
 	delete[] date;
 	date = new char[strlen(newDate) + 1];
 	strcpy(date, newDate);
@@ -17,8 +15,8 @@ feedback::feedback(const char* newDate, const char* newDescription, const Costum
 
 feedback::~feedback()
 {
-	cout << "In Feedback's d'tor for " << vendorP->getUserName() << endl;
-
+	costumerP = nullptr;
+	vendorP = nullptr;
 	delete[] date;
 	delete[] description;
 }

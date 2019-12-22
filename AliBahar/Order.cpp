@@ -4,16 +4,12 @@
 
 Order::Order(const Costumer& costumerP, double totalPrice, int productAmount) : costumerP(&costumerP)
 {
-	cout << "In Order's c'tor for " << costumerP.getUserName() << endl;
-
 	this->totalPrice = totalPrice;
 	this->productAmount = productAmount;
 }
 
 Order::Order(const Order& other)
 {
-	cout << "In Order's cpy c'tor for " << other.costumerP->getUserName() << endl;
-
 	this->totalPrice = other.totalPrice;
 	this->productAmount = other.productAmount;
 	this->costumerP = other.costumerP;
@@ -26,12 +22,10 @@ Order::Order(const Order& other)
 
 Order::~Order()
 {
-	cout << "In Order's d'tor for " << this->costumerP->getUserName() << endl;
+	costumerP = nullptr;
 
 	for (int i = 0; i < productAmount; i++)		//init the pointers to products
 		purchases[i] = nullptr;
-
-	costumerP = nullptr;
 	delete[] purchases;							//remove the allocation of main arr
 }
 

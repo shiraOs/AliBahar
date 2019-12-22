@@ -10,13 +10,11 @@ class vendor;
 
 #pragma warning (disable: 4996)
 
-const int MAX_FEE = 100;
-
 class feedback
 {
 private:
-	const Costumer* const costumerP;
-	const vendor* const vendorP;
+	const Costumer* costumerP;
+	const vendor* vendorP;
 	char* date;
 	char* description;
 

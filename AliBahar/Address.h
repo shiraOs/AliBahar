@@ -6,7 +6,6 @@
 using namespace std;
 
 #pragma warning (disable: 4996)
-const int MAX_ADD = 20; 
 
 class address
 {
@@ -24,12 +23,16 @@ public:
 
 	void setState(char* newState);
 	char* getState() const;
+
 	void setCity(char* newCity);
 	char* getCity() const;
+
 	void setStreet(char* newStreet);
 	char* getStreet() const;
+
 	void setHomeNum(int newHomeNum);
 	int getHomeNum() const;
+
 	void setAptNum(int newAptNum);
 	int getAptNum() const;
 

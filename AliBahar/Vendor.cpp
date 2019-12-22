@@ -5,16 +5,12 @@
 
 vendor::vendor(char* userName, char* password, const address& address, int productAmount, int feedbackAmount) :homeAddress(address)
 {
-	cout << "In Vendor's c'tor for " << userName << endl;
-
 	setUserName(userName);
 	setPassword(password);
 }
 
 vendor::~vendor()
 {
-	cout << "In Vendor's d'tor for " << userName << endl;
-
 	delete[] userName;
 	delete[] password;
 

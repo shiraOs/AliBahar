@@ -4,8 +4,6 @@
 product::product(eCategory newCategory, char* newName, double newPrice, int newSerialNum, const vendor& newV)
 	: category(newCategory), serialNum(newSerialNum)
 {
-	cout << "In Product's c'tor for " << newName << endl;
-
 	setName(newName);
 	setPrice(newPrice);
 	setVendor(newV);
@@ -13,8 +11,6 @@ product::product(eCategory newCategory, char* newName, double newPrice, int newS
 
 product::~product()
 {
-	cout << "In Product's d'tor for " << name << endl;
-
 	vendorP = nullptr;
 	delete[] name;
 }

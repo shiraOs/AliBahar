@@ -4,18 +4,17 @@
 #include "Order.h"
 
 Costumer::Costumer(char* userName, char* password, const address& address,
-	int shoppingCartSize, int vendorsAmount, int penOrdersAmount)	: homeAddress(address)
+	int shoppingCartSize, int vendorsAmount, int penOrdersAmount) : homeAddress(address)
 {
-	cout << "In Costumer's c'tor for " << userName << endl;
-
 	setUserName(userName);
 	setPassword(password);
+	shoppingCart = nullptr;
+	allVendors = nullptr;
+	pendingOrders = nullptr;
 }
 
 Costumer::~Costumer()
 {
-	cout << "In Costumer's d'tor for " << userName << endl;
-
 	delete[] userName;
 	delete[] password;
 
